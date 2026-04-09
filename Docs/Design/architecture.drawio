@@ -1,0 +1,186 @@
+<mxfile host="app.diagrams.net" version="24.0.0">
+  <diagram name="1. System Overview" id="fsdi-1">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="t" value="field-service-document-intelligence — System Overview" style="text;html=1;align=center;verticalAlign=middle;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1120" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="src" value="Visit documents&#10;intake forms · visit notes&#10;care plans · checklists" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="220" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="docai" value="GCP Document AI&#10;OCR + form field extraction" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1">
+          <mxGeometry x="300" y="120" width="220" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="ingest" value="FastAPI ingestion&#10;normalize · validate · attach to subject" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="560" y="120" width="260" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="mongo" value="MongoDB&#10;subjects · visits · documents · extracted_fields · summaries" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1">
+          <mxGeometry x="860" y="120" width="280" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="api" value="Subject record API&#10;FastAPI · /subjects /visits /summary /ask" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="40" y="290" width="380" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="adk" value="Google ADK agent&#10;summarize history · surface follow-ups&#10;answer grounded questions over the record" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1">
+          <mxGeometry x="460" y="290" width="380" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="user" value="Care coordinator / field staff" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666" vertex="1" parent="1">
+          <mxGeometry x="880" y="300" width="260" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="obs" value="Structured logging · PHI-aware redaction · Pytest + MagicMock" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999;dashed=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="430" width="1100" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" style="endArrow=classic;html=1" edge="1" parent="1" source="src" target="docai"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="endArrow=classic;html=1" edge="1" parent="1" source="docai" target="ingest"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="endArrow=classic;html=1" edge="1" parent="1" source="ingest" target="mongo"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="endArrow=classic;html=1" edge="1" parent="1" source="api" target="mongo"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="endArrow=classic;html=1" edge="1" parent="1" source="adk" target="api"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" style="endArrow=classic;html=1" edge="1" parent="1" source="user" target="adk"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="2. Visit Document Ingestion" id="fsdi-2">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="t" value="Visit Document Ingestion — upload to structured fields" style="text;html=1;align=center;verticalAlign=middle;fontSize=15;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1120" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="i1" value="POST /visits/{id}/documents&#10;file + doc_type + visit_id" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="240" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="i2" value="Doc AI processor&#10;intake form / visit note / care plan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1">
+          <mxGeometry x="320" y="120" width="260" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="i3" value="Field normalizer&#10;coerce to schema · units · enums" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="620" y="120" width="260" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="i4" value="Validation&#10;required fields · ranges · cross-field rules" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1">
+          <mxGeometry x="920" y="120" width="220" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="i5" value="Persist to MongoDB&#10;documents (raw + parsed) + extracted_fields&#10;link to subject_id and visit_id" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1">
+          <mxGeometry x="320" y="240" width="560" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="i6" value="Followup detection&#10;new tasks if extracted_fields trigger care plan rules" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1">
+          <mxGeometry x="320" y="360" width="560" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" style="endArrow=classic;html=1" edge="1" parent="1" source="i1" target="i2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="endArrow=classic;html=1" edge="1" parent="1" source="i2" target="i3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="endArrow=classic;html=1" edge="1" parent="1" source="i3" target="i4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="endArrow=classic;html=1" edge="1" parent="1" source="i4" target="i5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="endArrow=classic;html=1" edge="1" parent="1" source="i5" target="i6"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="3. Subject Record Aggregation" id="fsdi-3">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="t" value="Subject Record Aggregation — Mongo collections" style="text;html=1;align=center;verticalAlign=middle;fontSize=15;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1120" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="s" value="subjects&#10;---&#10;_id&#10;tenant_id&#10;display_id (hash)&#10;enrollment_dates&#10;assigned_team_id" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontFamily=Courier New;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="240" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="v" value="visits&#10;---&#10;_id&#10;subject_id&#10;visit_date&#10;visit_type&#10;clinician_id (hash)&#10;status" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontFamily=Courier New;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="320" y="100" width="240" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="d" value="documents&#10;---&#10;_id&#10;visit_id&#10;subject_id&#10;doc_type&#10;mime_type&#10;raw_text&#10;ocr_confidence" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontFamily=Courier New;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="600" y="100" width="240" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="ef" value="extracted_fields&#10;---&#10;_id&#10;document_id&#10;field_name&#10;value&#10;confidence&#10;phi: bool" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontFamily=Courier New;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="880" y="100" width="240" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="su" value="summaries&#10;---&#10;_id&#10;subject_id&#10;produced_at&#10;model · prompt_hash&#10;narrative&#10;cited_doc_ids[]&#10;outstanding_items[]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontFamily=Courier New;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="320" y="350" width="520" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="r1" style="endArrow=classic;html=1" edge="1" parent="1" source="s" target="v"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r2" style="endArrow=classic;html=1" edge="1" parent="1" source="v" target="d"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r3" style="endArrow=classic;html=1" edge="1" parent="1" source="d" target="ef"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="r4" style="endArrow=classic;html=1;dashed=1" edge="1" parent="1" source="su" target="d"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="4. ADK Agent Tools" id="fsdi-4">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="t" value="ADK Agent Tools — what the agent can call" style="text;html=1;align=center;verticalAlign=middle;fontSize=15;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1120" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="agent" value="LlmAgent (mesa_field_intel)&#10;model: gemini-2.0-flash&#10;instruction: ground every answer in cited documents; never invent facts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="1100" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="tl1" value="get_subject(subject_id)&#10;Mongo subjects + visits join" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="40" y="220" width="260" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="tl2" value="get_visit_documents(visit_id)&#10;documents + extracted_fields" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="320" y="220" width="260" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="tl3" value="search_documents(subject_id, query, k)&#10;vector or text search across the subject's docs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="600" y="220" width="280" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="tl4" value="list_outstanding_items(subject_id)&#10;rule-based scan over recent extracted_fields" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="900" y="220" width="240" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="out" value="Summarize history → narrative + cited_doc_ids + outstanding_items&#10;persist to summaries collection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1">
+          <mxGeometry x="40" y="360" width="1100" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" style="endArrow=classic;html=1" edge="1" parent="1" source="agent" target="tl1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="endArrow=classic;html=1" edge="1" parent="1" source="agent" target="tl2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="endArrow=classic;html=1" edge="1" parent="1" source="agent" target="tl3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="endArrow=classic;html=1" edge="1" parent="1" source="agent" target="tl4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="endArrow=classic;html=1" edge="1" parent="1" source="agent" target="out"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="5. Sequence — outstanding for subject" id="fsdi-5">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="t" value="Sequence — &quot;what is outstanding for subject X?&quot;" style="text;html=1;align=center;verticalAlign=middle;fontSize=15;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1120" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="x1" value="Care coordinator" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="40" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="x2" value="FastAPI /ask" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top" vertex="1" parent="1">
+          <mxGeometry x="280" y="80" width="40" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="x3" value="ADK agent" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top" vertex="1" parent="1">
+          <mxGeometry x="500" y="80" width="40" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="x4" value="Mongo tools" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top" vertex="1" parent="1">
+          <mxGeometry x="720" y="80" width="40" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="x5" value="Gemini" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top" vertex="1" parent="1">
+          <mxGeometry x="940" y="80" width="40" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="x6" value="summaries" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top" vertex="1" parent="1">
+          <mxGeometry x="1100" y="80" width="40" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="l1" style="endArrow=none;html=1;dashed=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="100" y="160" as="sourcePoint"/><mxPoint x="100" y="700" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="l2" style="endArrow=none;html=1;dashed=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="300" y="160" as="sourcePoint"/><mxPoint x="300" y="700" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="l3" style="endArrow=none;html=1;dashed=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="520" y="160" as="sourcePoint"/><mxPoint x="520" y="700" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="l4" style="endArrow=none;html=1;dashed=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="740" y="160" as="sourcePoint"/><mxPoint x="740" y="700" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="l5" style="endArrow=none;html=1;dashed=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="960" y="160" as="sourcePoint"/><mxPoint x="960" y="700" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="l6" style="endArrow=none;html=1;dashed=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1120" y="160" as="sourcePoint"/><mxPoint x="1120" y="700" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m1" value="POST /subjects/X/ask" style="endArrow=classic;html=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="100" y="190" as="sourcePoint"/><mxPoint x="300" y="190" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m2" value="invoke agent (question)" style="endArrow=classic;html=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="300" y="220" as="sourcePoint"/><mxPoint x="520" y="220" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m3" value="get_subject(X)" style="endArrow=classic;html=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="520" y="250" as="sourcePoint"/><mxPoint x="740" y="250" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m4" value="list_outstanding_items(X)" style="endArrow=classic;html=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="520" y="285" as="sourcePoint"/><mxPoint x="740" y="285" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m5" value="search_documents(X, question, k=5)" style="endArrow=classic;html=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="520" y="320" as="sourcePoint"/><mxPoint x="740" y="320" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m6" value="results" style="endArrow=classic;html=1;dashed=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="740" y="350" as="sourcePoint"/><mxPoint x="520" y="350" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m7" value="grounded prompt" style="endArrow=classic;html=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="520" y="380" as="sourcePoint"/><mxPoint x="960" y="380" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m8" value="answer + cited_doc_ids" style="endArrow=classic;html=1;dashed=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="960" y="410" as="sourcePoint"/><mxPoint x="520" y="410" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m9" value="persist summary" style="endArrow=classic;html=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="520" y="440" as="sourcePoint"/><mxPoint x="1120" y="440" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m10" value="response" style="endArrow=classic;html=1;dashed=1" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="300" y="470" as="sourcePoint"/><mxPoint x="100" y="470" as="targetPoint"/></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
